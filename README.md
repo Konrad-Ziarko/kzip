@@ -1,64 +1,41 @@
-# zzCrack v2
-Ever forgot your password to a zipfile or you just want to crack the password for some reason, Then zzCrack is what you need
+# kzip cracker
+**Supports AES encrypted zip files.**  
+This tool bruteforce enumerates over all possible passwords discovering matching
+ password for given file.  
+Huge performance improvement was archived with multiprocessing lib, by default application is
+ spawns exactly 10 jobs that independently crack 100 passwords each.
 
-This is a advanced tool to crack passwords on zipfiles by wordlists or bruteforce.
+#### TESTED UNDER PYTHON 3.11
 
-You can also save the current state in wordlist and return from it anytime
-
-## Download:
-You can download it as a zipfile or however you want
-Then cd into the folder where zz.py is located and run
+## Install requirements
 ```
 pip install -r requirements.txt
 ```
 
 ## Usage:
-Run main.py with either arguments(more advanced) or without arguments(easy)
 
-Argument Help: ```zz.py --help```
-
-### Exampel Usage:
-#### Without arguments:
-```
-▒███████▒▒███████▒ ▄████▄   ██▀███   ▄▄▄       ▄████▄   ██ ▄█▀
-▒ ▒ ▒ ▄▀░▒ ▒ ▒ ▄▀░▒██▀ ▀█  ▓██ ▒ ██▒▒████▄    ▒██▀ ▀█   ██▄█▒ 
-░ ▒ ▄▀▒░ ░ ▒ ▄▀▒░ ▒▓█    ▄ ▓██ ░▄█ ▒▒██  ▀█▄  ▒▓█    ▄ ▓███▄░ 
-  ▄▀▒   ░  ▄▀▒   ░▒▓▓▄ ▄██▒▒██▀▀█▄  ░██▄▄▄▄██ ▒▓▓▄ ▄██▒▓██ █▄ 
-▒███████▒▒███████▒▒ ▓███▀ ░░██▓ ▒██▒ ▓█   ▓██▒▒ ▓███▀ ░▒██▒ █▄
-░▒▒ ▓░▒░▒░▒▒ ▓░▒░▒░ ░▒ ▒  ░░ ▒▓ ░▒▓░ ▒▒   ▓▒█░░ ░▒ ▒  ░▒ ▒▒ ▓▒
-░░▒ ▒ ░ ▒░░▒ ▒ ░ ▒  ░  ▒     ░▒ ░ ▒░  ▒   ▒▒ ░  ░  ▒   ░ ░▒ ▒░
-░ ░ ░ ░ ░░ ░ ░ ░ ░░          ░░   ░   ░   ▒   ░        ░ ░░ ░ 
-  ░ ░      ░ ░    ░ ░         ░           ░  ░░ ░      ░  ░   
-░        ░        ░                           ░               
-
-https://github.com/robi0t
-
-
-Enter a directory/name to a .zip file > test.zip
-Which attack type would you like to run
-0: Bruteforce    1: Wordlist > 0
-
-[+] Which characters to use in the attack (combine to use multiple, separated by +)
- 0: Only small letters
- 1: Only big letters
- 2: Only numbers
- 3: Only signs
- 4: Everything
-> 0
-
-[-+] Max length > 4
-
-Do you want to output everything (slower) or not (faster)  y/n > y
+```shell
+python3 zz.py -f test.zip -l 8                    # crack pass with 8 chars at most
+python3 zz.py -f test.zip -l 8 -m 200             # each job checks 200 passwords
+python3 zz.py -f test.zip -l 8 -p 20              # spawn 20 processes/jobs
+python3 zz.py -f test.zip -l 8 -c 22611800        # continue from previous last index
+python3 zz.py -f test.zip -l 8 -m 200 -c 365700   # continue from previous last index - make sure to set (-m) the same otherwise continue_index with point to different word set
 ```
 
-#### With arguments:
-```python zz.py -f test.zip -w rockyou.txt --stream```
+### Results
+Program prints results as is.  
+Not printable or control characters may be hard to read so you are also provided hex representation of that string.
 
-```python zz.py -f test.zip -b -c 0+2 -l 4 --stream```
+i.e. 
+```shell
+Tries: 22971800 > l
+g [6C:0A:67:0C]
+```
+Restive results with
+```python
+string = '6C:0A:67:0C'
+print([chr(int(h, 16)) for h in string.split(':')])
+>>> ['l', '\n', 'g', '\x0c']
+```
+Also consult with ASCII table.
 
-```python zz.py --restore 0```
-
-**--stream prints everything it tries, it makes the process slower**
-
-
-### If you experience any error please post a issue
